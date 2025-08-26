@@ -1,4 +1,48 @@
-# Text Generation and Evaluation Pipeline
+# LLM Novel Decoding with Parallel Tempering
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+**A physics-inspired decoding algorithm that helps Large Language Models (LLMs) generate more creative and varied text without losing coherence.**
+
+## Overview
+
+**The Problem:** There's a fundamental trade-off in LLM decoding. Low-temperature sampling produces coherent but boring and repetitive text. High-temperature sampling is more creative but often leads to incoherent, nonsensical outputs ("hallucinations").
+
+**Our Solution:** This repository implements **Parallel Tempering (PT)**, a decoding algorithm inspired by replica-exchange Monte Carlo methods from statistical physics. It runs two parallel sampling chains(useing T=1.0 and 2.0 as example, user can adjust based on own needs):
+- A **"Cold" chain** (`T=1.0`) to preserve coherence.
+- A **"Hot" chain** (`T>1.0`) to explore creative, low-probability tokens.
+
+Periodically, the chains attempt to **swap their internal states** based on a Metropolis-Hastings criterion. This allows the cold chain to "inherit" promising creative discoveries from the hot chain without sacrificing its stability.
+
+In effect, PT performs a more intelligent and efficient exploration of the model's probability distribution, leading to more engaging and diverse generations.
+
+## Key Findings
+
+Our experiments with GPT-2 Medium demonstrate that Parallel Tempering decoding effectively finds a "sweet spot" between standard sampling methods:
+
+| Method | Perplexity (PPL) ↓ | Distinct-1 ↑ |
+| :--- | :--- | :--- |
+| Baseline (T=1.0) | 12.27 | 0.64 |
+| Baseline (T=2.0) | 42.02 | 0.73 |
+| **PT (Cold Chain)** | **16.86** | **0.67** |
+| **PT (Hot Chain)** | **16.43** | **0.67** |
+|
+
+**Quantitative:** The PT-enhanced cold chain achieves higher diversity (Distinct-1) than standard T=1 sampling, while maintaining significantly lower perplexity (higher coherence) than standard T=2 sampling.
+
+**Qualitative:** Generations are noticeably more varied and narratively interesting than standard sampling, without devolving into nonsense.
+## How It Works (Theoretical Background)
+
+The method is analogous to Parallel Tempering in computational physics. The "energy" of a generated sequence $\mathbf{x}$ is defined as its negative log-likelihood:
+
+$$E(\mathbf{x}) = -\log P(\mathbf{x})$$
+
+The core mechanism is the potential swap between the two chains. The probability of accepting a swap between the state of the cold chain $\mathbf{x}_c$ (at temperature $T_c$) and the hot chain $\mathbf{x}_h$ (at temperature $T_h$) is governed by the Metropolis-Hastings criterion:
+
+$$A = \min\left\{1,\ \exp\left[\left(\frac{1}{T_c} - \frac{1}{T_h}\right)\left(E(\mathbf{x}_c) - E(\mathbf{x}_h)\right)\right]\right\}$$
+
+This criterion ensures the detailed balance condition is maintained, allowing the cold chain to efficiently sample from a more diverse and creative distribution while retaining high coherence. The user's choice of $T_c$ and $T_h$ directly controls the balance between exploration (creativity) and exploitation (coherence).
+
+# Getting Started with the repo
 
 This repository contains scripts for generating text sequences using a language model(GPT-2 medium) and evaluating the generated outputs based on specific metrics(Distinct_1,2,3, perplexity).
 
