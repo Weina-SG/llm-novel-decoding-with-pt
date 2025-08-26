@@ -41,7 +41,6 @@ The core mechanism is the potential swap between the two chains. The probability
 ```
 A = min{ 1, exp[(1/Tc - 1/Th) * (E(xc) - E(xh))] }
 ```
-
 This criterion ensures the detailed balance condition is maintained, allowing the cold chain to efficiently sample from a more diverse and creative distribution while retaining high coherence. The user's choice of $T_c$ and $T_h$ directly controls the balance between exploration (creativity) and exploitation (coherence).
 
 # Getting Started with the repo
@@ -105,3 +104,8 @@ python evaluation.py
 This project is licensed under the MIT License. You are free to use, modify, and distribute this code for research and commercial purposes, provided that proper attribution is given.
 
 See the [LICENSE](LICENSE) file for details.
+
+
+## Data Attribution
+
+This project uses 95 data points from the ["NLP-1K-Stories-Dataset-Genres-100"](https://github.com/FareedKhan-dev/NLP-1K-Stories-Dataset-Genres-100) which is licensed under a [Creative Commons Attribution 2.0 Generic License (CC BY 2.0)](https://creativecommons.org/licenses/by/2.0/).
