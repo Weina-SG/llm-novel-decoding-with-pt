@@ -37,7 +37,8 @@ The method is analogous to Parallel Tempering in computational physics. The "ene
 $$E(\mathbf{x}) = -\log P(\mathbf{x})$$
 
 The core mechanism is the potential swap between the two chains. The probability of accepting a swap between the state of the cold chain $\mathbf{x}_c$ (at temperature $T_c$) and the hot chain $\mathbf{x}_h$ (at temperature $T_h$) is governed by the Metropolis-Hastings criterion:
-$$A = \min\{1,\, \exp[(\frac{1}{T_c} - \frac{1}{T_h})(E(\mathbf{x}_c) - E(\mathbf{x}_h))]\}$$
+
+$$A = \min\left\{1,\, \exp[(\frac{1}{T_c} - \frac{1}{T_h})(E(\mathbf{x}_c) - E(\mathbf{x}_h))]\right\}$$
 
 This criterion ensures the detailed balance condition is maintained, allowing the cold chain to efficiently sample from a more diverse and creative distribution while retaining high coherence. The user's choice of $T_c$ and $T_h$ directly controls the balance between exploration (creativity) and exploitation (coherence).
 
